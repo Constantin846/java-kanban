@@ -1,4 +1,4 @@
-package tasktypes;
+package tracker.tasks;
 
 public class Subtask extends Task {
     private Epic topEpic;

@@ -1,4 +1,4 @@
-package tasktypes;
+package tracker.tasks;
 
 public enum TaskStatus {
     NEW,

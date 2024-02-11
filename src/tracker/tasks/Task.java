@@ -1,10 +1,10 @@
-package tasktypes;
+package tracker.tasks;
 
 public class Task {
-    protected String name;
-    protected String description;
-    protected int id;
-    protected TaskStatus taskStatus;
+    String name;
+    String description;
+    int id;
+    TaskStatus taskStatus;
 
     public Task(String name, String description, TaskStatus taskStatus) {
         this.name = name;

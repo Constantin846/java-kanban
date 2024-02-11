@@ -1,4 +1,4 @@
-package tasktypes;
+package tracker.tasks;
 
 import java.util.ArrayList;
 
