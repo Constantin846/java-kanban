@@ -20,11 +20,11 @@ class InMemoryHistoryManagerTest {
         Managers.getDefault().getTaskById(task.getId());
         Task newTask = new Task("new name", "new description", TaskStatus.IN_PROGRESS);
         Managers.getDefault().updateTask(task, newTask);
-        Task historyTask = (Task) Managers.getDefaultHistory().getHistory().getFirst();
+        Task taskFromHistory = (Task) Managers.getDefaultHistory().getHistory().getFirst();
 
-        Assertions.assertEquals(task.getName(), historyTask.getName());
-        Assertions.assertEquals(task.getDescription(), historyTask.getDescription());
-        Assertions.assertEquals(task.getTaskStatus(), historyTask.getTaskStatus());
+        Assertions.assertEquals(task.getName(), taskFromHistory.getName());
+        Assertions.assertEquals(task.getDescription(), taskFromHistory.getDescription());
+        Assertions.assertEquals(task.getTaskStatus(), taskFromHistory.getTaskStatus());
     }
 
     @Test

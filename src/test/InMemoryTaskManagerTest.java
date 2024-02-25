@@ -8,7 +8,6 @@ import tracker.tasks.Epic;
 import tracker.tasks.Subtask;
 import tracker.tasks.Task;
 import tracker.tasks.TaskStatus;
-
 import java.util.HashMap;
 
 class InMemoryTaskManagerTest {
@@ -21,52 +20,53 @@ class InMemoryTaskManagerTest {
 
     @Test
     public void shouldBeInMemoryTaskManagerAddTaskAndReturnItById() {
-        Task task = new Task("n","d", TaskStatus.NEW);
-        inMemoryTaskManager.createTask(task);
-        Task taskById = inMemoryTaskManager.getTaskById(task.getId());
-        assertEquals(task, taskById);
+        Task taskExpected = new Task("name","description", TaskStatus.NEW);
+        inMemoryTaskManager.createTask(taskExpected);
+        Task taskActual = inMemoryTaskManager.getTaskById(taskExpected.getId());
+        assertEquals(taskExpected, taskActual);
     }
 
     @Test
     public void shouldBeInMemoryTaskManagerAddEpicAndReturnItById() {
-        Epic epic = new Epic("n","d", TaskStatus.NEW);
-        inMemoryTaskManager.createEpic(epic);
-        Epic epicById = inMemoryTaskManager.getEpicById(epic.getId());
-        assertEquals(epic, epicById);
+        Epic epicExpected = new Epic("name","description", TaskStatus.NEW);
+        inMemoryTaskManager.createEpic(epicExpected);
+        Epic epicActual = inMemoryTaskManager.getEpicById(epicExpected.getId());
+        assertEquals(epicExpected, epicActual);
     }
 
     @Test
     public void shouldBeInMemoryTaskManagerAddSubtaskAndReturnItById() {
-        Subtask subtask = new Subtask("n","d", TaskStatus.NEW);
-        inMemoryTaskManager.createSubtask(subtask, new Epic("n","d", TaskStatus.NEW));
-        Subtask subtaskById = inMemoryTaskManager.getSubtaskById(subtask.getId());
-        assertEquals(subtask, subtaskById);
+        Subtask subtaskExpected = new Subtask("name","des", TaskStatus.NEW);
+        inMemoryTaskManager.createSubtask(subtaskExpected, new Epic("n","d", TaskStatus.NEW));
+        Subtask subtaskActual = inMemoryTaskManager.getSubtaskById(subtaskExpected.getId());
+        assertEquals(subtaskExpected, subtaskActual);
     }
 
     @Test
     public void shouldNotChangeInMemoryTaskManagerIfChangeIdToAlreadyExistsInTask() {
-        Task task = new Task("name","des", TaskStatus.NEW);
-        Task task1 = new Task("name1","des1", TaskStatus.NEW);
-        inMemoryTaskManager.createTask(task);
-        inMemoryTaskManager.createTask(task1);
-        HashMap<Integer, Task> tasks = new HashMap<>(inMemoryTaskManager.getOnlyTasks());
-        task1.setId(task.getId());
-        HashMap<Integer, Task> newTasks = new HashMap<>(inMemoryTaskManager.getOnlyTasks());
+        Task firstTask = new Task("name","des", TaskStatus.NEW);
+        Task secondTask = new Task("new name","new des", TaskStatus.NEW);
+        inMemoryTaskManager.createTask(firstTask);
+        inMemoryTaskManager.createTask(secondTask);
+        HashMap<Integer, Task> tasksExpected = new HashMap<>(inMemoryTaskManager.getOnlyTasks());
+        secondTask.setId(firstTask.getId());
+        HashMap<Integer, Task> tasksActual = new HashMap<>(inMemoryTaskManager.getOnlyTasks());
 
-        for (Integer id : tasks.keySet()) {
-            assertEquals(tasks.get(id), newTasks.get(id));
+        for (Integer id : tasksExpected.keySet()) {
+            assertEquals(tasksExpected.get(id), tasksActual.get(id));
         }
     }
 
     @Test
     public void shouldNotChangeTaskFieldIfAddTaskTwiceToInMemoryTaskManager() {
-        Task task = new Task("n","d", TaskStatus.NEW);
-        int id1 = inMemoryTaskManager.createTask(task);
-        int id2 = inMemoryTaskManager.createTask(task);
-        Task task1 = inMemoryTaskManager.getTaskById(id1);
-        Task task2 = inMemoryTaskManager.getTaskById(id2);
-        assertEquals(task1.getName(), task2.getName());
-        assertEquals(task1.getDescription(), task2.getDescription());
-        assertEquals(task1.getTaskStatus(), task2.getTaskStatus());
+        Task task = new Task("name","description", TaskStatus.NEW);
+        int firstId = inMemoryTaskManager.createTask(task);
+        int secondId = inMemoryTaskManager.createTask(task);
+        Task taskExpected = inMemoryTaskManager.getTaskById(firstId);
+        Task taskActual = inMemoryTaskManager.getTaskById(secondId);
+
+        assertEquals(taskExpected.getName(), taskActual.getName());
+        assertEquals(taskExpected.getDescription(), taskActual.getDescription());
+        assertEquals(taskExpected.getTaskStatus(), taskActual.getTaskStatus());
     }
 }

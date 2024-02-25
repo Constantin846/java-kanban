@@ -8,24 +8,25 @@ import tracker.tasks.Task;
 import tracker.tasks.TaskStatus;
 
 class AbstractTaskTest {
-    AbstractTask task;
-    AbstractTask task1;
+    AbstractTask taskExpected;
+    AbstractTask taskActual;
 
     @BeforeEach
     public void beforeEach() {
-        task = new Task("name", "description", TaskStatus.NEW);
-        task1 = new Task("name1", "description1", TaskStatus.NEW);
-        task.setId(123);
+        taskExpected = new Task("name", "description", TaskStatus.NEW);
+        taskActual = new Task("new name", "new description", TaskStatus.NEW);
+        taskExpected.setId(123);
     }
+
     @Test
     public void shouldBeAbstractTaskEqualsAbstractTaskIfTheirIdsEqual() {
-        task1.setId(task.getId());
-        Assertions.assertEquals(task, task1);
+        taskActual.setId(taskExpected.getId());
+        Assertions.assertEquals(taskExpected, taskActual);
     }
 
     @Test
     public void shouldBeNotAbstractTaskEqualsAbstractTaskIfTheirIdsDoNotEqual() {
-        task1.setId(task.getId() + 1);
-        Assertions.assertNotEquals(task, task1);
+        taskActual.setId(taskExpected.getId() + 1);
+        Assertions.assertNotEquals(taskExpected, taskActual);
     }
 }
