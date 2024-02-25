@@ -1,11 +1,11 @@
-import tracker.TaskManager;
 import tracker.tasks.*;
 import java.util.HashMap;
+import static tracker.service.Managers.getDefault;
+import static tracker.service.Managers.getDefaultHistory;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Поехали!");
-        TaskManager taskManager = new TaskManager();
 
         Task firstTask = new Task("Первая задача", "Описание для первой задачи", TaskStatus.NEW);
         Task secondTask = new Task("Вторая задача", "Описание второй задачи", TaskStatus.IN_PROGRESS);
@@ -15,14 +15,24 @@ public class Main {
         Subtask secondSubtask = new Subtask("Подзадача 2", "Задача 1го эпика", TaskStatus.IN_PROGRESS);
         Subtask singleSubtask = new Subtask("Подзадача 3", "Одна подзадача эпика 2", TaskStatus.NEW);
 
-        taskManager.createTask(firstTask);
-        taskManager.createTask(secondTask);
-        taskManager.createEpic(firstEpic);
-        taskManager.createEpic(secondEpic);
-        taskManager.createSubtask(firstSubtask, firstEpic);
-        taskManager.createSubtask(secondSubtask, firstEpic);
-        taskManager.createSubtask(singleSubtask, secondEpic);
-        printTaskHashMap(taskManager.getAllTasks());
+        getDefault().createTask(firstTask);
+        getDefault().createTask(secondTask);
+        getDefault().createEpic(firstEpic);
+        getDefault().createEpic(secondEpic);
+        getDefault().createSubtask(firstSubtask, firstEpic);
+        getDefault().createSubtask(secondSubtask, firstEpic);
+        getDefault().createSubtask(singleSubtask, secondEpic);
+        printTaskHashMap(getDefault().getAllTasks());
+
+        getDefault().getTaskById(firstTask.getId());
+        getDefault().getTaskById(secondTask.getId());
+        getDefault().getEpicById(firstEpic.getId());
+        getDefault().getEpicById(secondEpic.getId());
+        getDefault().getSubtaskById(firstSubtask.getId());
+        getDefault().getSubtaskById(secondSubtask.getId());
+        getDefault().getSubtaskById(singleSubtask.getId());
+        System.out.println(getDefaultHistory().getHistory());
+        System.out.println("_______________________________________");
 
         Task newFirstTask = new Task(firstTask.getName(), firstTask.getDescription(), TaskStatus.DONE);
         Task newSecondTask = new Task(secondTask.getName(), secondTask.getDescription(), TaskStatus.DONE);
@@ -32,25 +42,40 @@ public class Main {
         Subtask newSecondSubtask = new Subtask(secondSubtask.getName(),secondSubtask.getDescription(),TaskStatus.DONE);
         Subtask newSingleSubtask = new Subtask(singleSubtask.getName(),singleSubtask.getDescription(),TaskStatus.DONE);
 
-        taskManager.updateTask(firstTask, newFirstTask);
-        taskManager.updateTask(secondTask, newSecondTask);
-        taskManager.updateEpic(firstEpic, newFirstEpic);
-        taskManager.updateEpic(secondEpic, newSecondEpic);
-        taskManager.updateSubtask(firstSubtask, newFirstSubtask);
-        taskManager.updateSubtask(secondSubtask, newSecondSubtask);
-        taskManager.updateSubtask(singleSubtask, newSingleSubtask);
-        printTaskHashMap(taskManager.getAllTasks());
+        getDefault().updateTask(firstTask, newFirstTask);
+        getDefault().updateTask(secondTask, newSecondTask);
+        getDefault().updateEpic(firstEpic, newFirstEpic);
+        getDefault().updateEpic(secondEpic, newSecondEpic);
+        getDefault().updateSubtask(firstSubtask, newFirstSubtask);
+        getDefault().updateSubtask(secondSubtask, newSecondSubtask);
+        getDefault().updateSubtask(singleSubtask, newSingleSubtask);
+        printTaskHashMap(getDefault().getAllTasks());
 
-        taskManager.removeTaskById(newFirstTask.getId());
-        taskManager.removeTaskById(newFirstEpic.getId());
-        taskManager.removeTaskById(newSingleSubtask.getId());
-        printTaskHashMap(taskManager.getAllTasks());
+        getDefault().getTaskById(newFirstEpic.getId());
+        getDefault().getEpicById(newFirstEpic.getId());
+        getDefault().getSubtaskById(singleSubtask.getId());
+        getDefault().getSubtaskById(newSecondSubtask.getId());
+        System.out.println(getDefaultHistory().getHistory());
+        System.out.println("_______________________________________");
 
-        taskManager.removeAllTasks();
-        printTaskHashMap(taskManager.getAllTasks());
+        getDefault().removeTaskById(newFirstTask.getId());
+        getDefault().removeTaskById(newFirstEpic.getId());
+        getDefault().removeTaskById(newSingleSubtask.getId());
+        printTaskHashMap(getDefault().getAllTasks());
+
+        getDefault().getTaskById(newSecondTask.getId());
+        getDefault().getEpicById(newSecondEpic.getId());
+        getDefault().getSubtaskById(singleSubtask.getId());
+        getDefault().getSubtaskById(newSecondSubtask.getId());
+        System.out.println(getDefaultHistory().getHistory());
+        System.out.println("_______________________________________");
+
+        getDefault().removeAllTasks();
+        printTaskHashMap(getDefault().getAllTasks());
+        System.out.println(getDefaultHistory().getHistory());
     }
 
-    public static void printTaskHashMap(HashMap<Integer, Task> tasks) {
+    public static void printTaskHashMap(HashMap<Integer, AbstractTask> tasks) {
         for (Integer id : tasks.keySet()) {
             System.out.println(tasks.get(id));
         }

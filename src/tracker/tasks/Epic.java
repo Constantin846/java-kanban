@@ -2,7 +2,7 @@ package tracker.tasks;
 
 import java.util.ArrayList;
 
-public class Epic extends Task {
+public class Epic extends AbstractTask {
     private ArrayList<Subtask> subtasks;
 
     public Epic(String name, String description, TaskStatus taskStatus) {
@@ -19,20 +19,20 @@ public class Epic extends Task {
         for (Subtask subtask : subtasks) {
             subtask.changeTopEpic(this);
         }
-        setEpicStatus();
+        determineEpicStatus();
     }
 
     void addSubtask(Subtask subtask) {
         subtasks.add(subtask);
-        setEpicStatus();
+        determineEpicStatus();
     }
 
     void removeSubtask(Subtask subtask) {
         subtasks.remove(subtask);
-        setEpicStatus();
+        determineEpicStatus();
     }
 
-    private void setEpicStatus() {
+    private void determineEpicStatus() {
         if (subtasks.isEmpty()) {
             taskStatus = TaskStatus.NEW;
         } else {

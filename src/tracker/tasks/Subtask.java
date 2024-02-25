@@ -1,6 +1,6 @@
 package tracker.tasks;
 
-public class Subtask extends Task {
+public class Subtask extends AbstractTask {
     private Epic topEpic;
 
     public Subtask(String name, String description, TaskStatus taskStatus) {
@@ -14,7 +14,7 @@ public class Subtask extends Task {
         topEpic.addSubtask(this);
     }
 
-    void changeTopEpic(Epic epic) { topEpic = epic; }
-
     public void removeFromTopEpic() { topEpic.removeSubtask(this); }
+
+    void changeTopEpic(Epic epic) { topEpic = epic; }
 }
