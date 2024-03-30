@@ -1,10 +1,13 @@
 package tracker.tasks;
 
+import tracker.service.TaskManager;
+
 public abstract class AbstractTask {
     String name;
     String description;
     int id;
     TaskStatus taskStatus;
+    TaskManager taskManager;
 
     public AbstractTask(String name, String description, TaskStatus taskStatus) {
         this.name = name;
@@ -12,15 +15,31 @@ public abstract class AbstractTask {
         this.taskStatus = taskStatus;
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(int id) {
+        if (!taskManager.containsId(id)) {
+            this.id = id;
+        }
+    }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getDescription() { return description; }
+    public String getDescription() {
+        return description;
+    }
 
-    public TaskStatus getTaskStatus() { return taskStatus; }
+    public TaskStatus getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskManager(TaskManager taskManager) {
+        this.taskManager = taskManager;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -30,7 +49,9 @@ public abstract class AbstractTask {
     }
 
     @Override
-    public int hashCode() { return id; }
+    public int hashCode() {
+        return id;
+    }
 
     @Override
     public String toString() {

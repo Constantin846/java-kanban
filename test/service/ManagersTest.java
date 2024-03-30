@@ -1,17 +1,17 @@
-package test;
+package service;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tracker.service.Managers;
 
 class ManagersTest {
     @Test
     public void shouldNotBeGetDefaultReturnNull() {
-        assertNotNull(Managers.getDefault());
+        Assertions.assertNotNull(Managers.getDefault());
     }
 
     @Test
     public void shouldNotBeGetDefaultHistoryReturnNull() {
-        assertNotNull(Managers.getDefaultHistory());
+        Assertions.assertNotNull(Managers.getDefaultHistory());
     }
 }

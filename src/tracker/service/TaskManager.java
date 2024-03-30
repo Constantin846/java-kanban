@@ -1,9 +1,11 @@
 package tracker.service;
 
 import tracker.tasks.*;
-import java.util.HashMap;
 
-public interface ITaskManager {
+import java.util.HashMap;
+import java.util.List;
+
+public interface TaskManager {
     HashMap<Integer, AbstractTask> getAllTasks();
 
     HashMap<Integer, Task> getOnlyTasks();
@@ -20,6 +22,8 @@ public interface ITaskManager {
 
     Subtask getSubtaskById(int id);
 
+    List<AbstractTask> getHistory();
+
     int createTask(Task task);
 
     int createEpic(Epic epic);
@@ -33,4 +37,6 @@ public interface ITaskManager {
     int updateSubtask(Subtask subtask, Subtask newSubtask);
 
     void removeTaskById(int id);
+
+    boolean containsId(int id);
 }
