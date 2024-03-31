@@ -29,7 +29,7 @@ public class Node {
         return nextNode;
     }
 
-    public void setNextNode(Node lastNode) {
-        this.nextNode = lastNode;
+    public void setNextNode(Node nextNode) {
+        this.nextNode = nextNode;
     }
 }

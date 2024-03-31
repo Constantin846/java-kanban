@@ -6,12 +6,12 @@ import tracker.service.Managers;
 
 class ManagersTest {
     @Test
-    public void shouldNotBeGetDefaultReturnNull() {
+    public void getDefault_shouldNotReturnNull() {
         Assertions.assertNotNull(Managers.getDefault());
     }
 
     @Test
-    public void shouldNotBeGetDefaultHistoryReturnNull() {
+    public void getDefaultHistory_shouldNotReturnNull() {
         Assertions.assertNotNull(Managers.getDefaultHistory());
     }
 }
