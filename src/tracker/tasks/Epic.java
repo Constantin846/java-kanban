@@ -11,24 +11,12 @@ public class Epic extends AbstractTask {
         this.taskStatus = TaskStatus.NEW;
     }
 
-    public ArrayList<Subtask> getSubtasks() { return subtasks; }
+    public ArrayList<Subtask> getSubtasks() {
+        return new ArrayList<>(subtasks);
+    }
 
     public void setSubtasks(ArrayList<Subtask> subtasks) {
         this.subtasks = subtasks;
-
-        for (Subtask subtask : subtasks) {
-            subtask.changeTopEpic(this);
-        }
-        determineEpicStatus();
-    }
-
-    void addSubtask(Subtask subtask) {
-        subtasks.add(subtask);
-        determineEpicStatus();
-    }
-
-    void removeSubtask(Subtask subtask) {
-        subtasks.remove(subtask);
         determineEpicStatus();
     }
 

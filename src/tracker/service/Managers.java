@@ -1,14 +1,11 @@
 package tracker.service;
 
 public class Managers {
-    private static final ITaskManager taskManager = new InMemoryTaskManager();
-    private static final IHistoryManager historyManager = new InMemoryHistoryManager();
-
-    public static ITaskManager getDefault() {
-        return taskManager;
+    public static TaskManager getDefault() {
+        return new InMemoryTaskManager(getDefaultHistory());
     }
 
-    public static IHistoryManager getDefaultHistory() {
-        return historyManager;
+    public static HistoryManager getDefaultHistory() {
+        return new InMemoryHistoryManager();
     }
 }
