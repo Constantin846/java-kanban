@@ -5,6 +5,7 @@ public class Subtask extends AbstractTask {
 
     public Subtask(String name, String description, TaskStatus taskStatus) {
         super(name, description, taskStatus);
+        this.taskType = TaskType.SUBTASK;
     }
 
     public Epic getTopEpic() {

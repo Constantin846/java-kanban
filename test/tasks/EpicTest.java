@@ -3,9 +3,6 @@ package tasks;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tracker.service.InMemoryHistoryManager;
-import tracker.service.InMemoryTaskManager;
-import tracker.service.TaskManager;
 import tracker.tasks.Epic;
 import tracker.tasks.TaskStatus;
 
@@ -18,9 +15,6 @@ class EpicTest {
         // prepare
         epicExpected = new Epic("name", "description", TaskStatus.NEW);
         epicActual = new Epic("new name", "new description", TaskStatus.NEW);
-        TaskManager taskManager = new InMemoryTaskManager(new InMemoryHistoryManager());
-        epicExpected.setTaskManager(taskManager);
-        epicActual.setTaskManager(taskManager);
         epicExpected.setId(123);
     }
 

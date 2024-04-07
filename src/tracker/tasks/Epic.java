@@ -8,7 +8,8 @@ public class Epic extends AbstractTask {
     public Epic(String name, String description, TaskStatus taskStatus) {
         super(name, description, taskStatus);
         subtasks = new ArrayList<>();
-        this.taskStatus = TaskStatus.NEW;
+        this.taskType = TaskType.EPIC;
+        determineEpicStatus();
     }
 
     public ArrayList<Subtask> getSubtasks() {

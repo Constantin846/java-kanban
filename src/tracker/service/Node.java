@@ -4,7 +4,7 @@ import tracker.tasks.AbstractTask;
 
 public class Node {
     private Node previousNode;
-    public AbstractTask task;
+    private final AbstractTask task;
     private Node nextNode;
 
     public Node(Node previousNode, AbstractTask task, Node nextNode) {

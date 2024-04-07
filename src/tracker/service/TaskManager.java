@@ -37,6 +37,4 @@ public interface TaskManager {
     int updateSubtask(Subtask subtask, Subtask newSubtask);
 
     void removeTaskById(int id);
-
-    boolean containsId(int id);
 }

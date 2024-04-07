@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import static tracker.service.IdGenerator.generateId;
 
-public class InMemoryTaskManager implements TaskManager {
-    private final HashMap<Integer, Task> taskHashMap;
-    private final HashMap<Integer, Epic> epicHashMap;
-    private final HashMap<Integer, Subtask> subtaskHashMap;
-    private HistoryManager historyManager;
+class InMemoryTaskManager implements TaskManager {
+    protected final HashMap<Integer, Task> taskHashMap;
+    protected final HashMap<Integer, Epic> epicHashMap;
+    protected final HashMap<Integer, Subtask> subtaskHashMap;
+    protected HistoryManager historyManager;
 
     public InMemoryTaskManager(HistoryManager historyManager) {
         taskHashMap = new HashMap<>();
@@ -88,7 +88,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createTask(Task task) {
         int id = generateId();
-        task.setTaskManager(this);
         task.setId(id);
         taskHashMap.put(id, task);
         return id;
@@ -97,7 +96,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createEpic(Epic epic) {
         int id = generateId();
-        epic.setTaskManager(this);
         epic.setId(id);
         epicHashMap.put(id, epic);
         return id;
@@ -111,7 +109,6 @@ public class InMemoryTaskManager implements TaskManager {
         subtask.setTopEpic(epic);
 
         int id = generateId();
-        subtask.setTaskManager(this);
         subtask.setId(id);
         subtaskHashMap.put(id, subtask);
         return id;
@@ -120,8 +117,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int updateTask(Task task, Task newTask) {
         int id = task.getId();
-        taskHashMap.remove(id);
-        newTask.setTaskManager(this);
         newTask.setId(id);
         taskHashMap.put(id, newTask);
         return id;
@@ -137,8 +132,6 @@ public class InMemoryTaskManager implements TaskManager {
         newEpic.setSubtasks(subtasks);
 
         int id = epic.getId();
-        epicHashMap.remove(id);
-        newEpic.setTaskManager(this);
         newEpic.setId(id);
         epicHashMap.put(id, newEpic);
         return id;
@@ -155,8 +148,6 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setSubtasks(subtasks);
 
         int id = subtask.getId();
-        subtaskHashMap.remove(id);
-        newSubtask.setTaskManager(this);
         newSubtask.setId(id);
         subtaskHashMap.put(id, newSubtask);
         return id;
@@ -200,12 +191,5 @@ public class InMemoryTaskManager implements TaskManager {
             subtasksOfEpic.put(subtask.getId(), subtask);
         }
         return subtasksOfEpic;
-    }
-
-    @Override
-    public boolean containsId(int id) {
-        return taskHashMap.containsKey(id)
-                || epicHashMap.containsKey(id)
-                || subtaskHashMap.containsKey(id);
     }
 }

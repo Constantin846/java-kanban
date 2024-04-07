@@ -3,9 +3,6 @@ package tasks;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tracker.service.InMemoryHistoryManager;
-import tracker.service.InMemoryTaskManager;
-import tracker.service.TaskManager;
 import tracker.tasks.AbstractTask;
 import tracker.tasks.Task;
 import tracker.tasks.TaskStatus;
@@ -19,9 +16,6 @@ class AbstractTaskTest {
         // prepare
         taskExpected = new Task("name", "description", TaskStatus.NEW);
         taskActual = new Task("new name", "new description", TaskStatus.NEW);
-        TaskManager taskManager = new InMemoryTaskManager(new InMemoryHistoryManager());
-        taskExpected.setTaskManager(taskManager);
-        taskActual.setTaskManager(taskManager);
         taskExpected.setId(123);
     }
 
