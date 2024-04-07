@@ -19,7 +19,7 @@ public class FileBackedTaskManagerTest {
     public void shouldLoadAndSaveEmptyFile() throws IOException {
         // copy the empty file to a new actual file
         Path expectedFile = Paths.get("test-resources\\empty.csv");
-        Path actualFile = Files.createTempFile(Path.of("test-resources"),"current",".csv");
+        Path actualFile = Paths.get("test-resources\\test-empty.csv");
         Files.copy(expectedFile, actualFile, StandardCopyOption.REPLACE_EXISTING);
 
         // create a fileBackedTaskManager and load data from the actual file
@@ -43,7 +43,7 @@ public class FileBackedTaskManagerTest {
     public void shouldLoadAndSaveFileWithTasks() throws IOException {
         // copy the expected file to a new actual file
         Path expectedFile = Paths.get("test-resources\\tasks.csv");
-        Path actualFile = Files.createTempFile(Path.of("test-resources"),"current",".csv");
+        Path actualFile = Paths.get("test-resources\\test-tasks.csv");
         Files.copy(expectedFile, actualFile, StandardCopyOption.REPLACE_EXISTING);
 
         // create a fileBackedTaskManager and load data from the actual file
