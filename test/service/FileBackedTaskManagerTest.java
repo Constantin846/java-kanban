@@ -17,7 +17,7 @@ import java.util.List;
 public class FileBackedTaskManagerTest {
     @Test
     public void shouldLoadAndSaveEmptyFile() throws IOException {
-        // make expected and actual empty file with a title string
+        // make expected and actual empty file with a title string, create a fileBackedTaskManager and load data
         String[] inFile = {"id,type,name,status,description,epic\n", "\n"};
         Path expectedFile = Files.createTempFile("expected-empty",".csv");
         Path actualFile = Files.createTempFile("actual-empty",".csv");
@@ -30,8 +30,7 @@ public class FileBackedTaskManagerTest {
                 actualFW.write(str);
             }
         }
-
-        // create a fileBackedTaskManager and load data from the actual file
+        
         TaskManager fileBackedTaskManager =
                 new FileBackedTaskManager(new InMemoryHistoryManager(), actualFile.toString());
 
@@ -50,7 +49,7 @@ public class FileBackedTaskManagerTest {
 
     @Test
     public void shouldLoadAndSaveFileWithTasks() throws IOException {
-        // make expected and actual file with tasks
+        // make expected and actual file with tasks, create a fileBackedTaskManager and load data
         String[] inFile = {
                 "id,type,name,status,description,epic\n",
                 "0,TASK,Первая задача,NEW,Описание для первой задачи,\n",
@@ -76,7 +75,6 @@ public class FileBackedTaskManagerTest {
             }
         }
 
-        // create a fileBackedTaskManager and load data from the actual file
         TaskManager fileBackedTaskManager =
                 new FileBackedTaskManager(new InMemoryHistoryManager(), actualFile.toString());
 
