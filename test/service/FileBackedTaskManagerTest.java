@@ -13,11 +13,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-
 public class FileBackedTaskManagerTest {
     @Test
     public void shouldLoadAndSaveEmptyFile() throws IOException {
-        // make expected and actual empty file with a title string, create a fileBackedTaskManager and load data
         String[] inFile = {"id,type,name,status,description,epic\n", "\n"};
         Path expectedFile = Files.createTempFile("expected-empty",".csv");
         Path actualFile = Files.createTempFile("actual-empty",".csv");
@@ -30,14 +28,12 @@ public class FileBackedTaskManagerTest {
                 actualFW.write(str);
             }
         }
-        
+
         TaskManager fileBackedTaskManager =
                 new FileBackedTaskManager(new InMemoryHistoryManager(), actualFile.toString());
 
-        // save data to the actual file by removeAllTask method
         fileBackedTaskManager.removeAllTasks();
 
-        // check lines in the actual file equals lines in the expected one
         List<String> expectedLines = Files.readAllLines(expectedFile);
         List<String> actualLines = Files.readAllLines(actualFile);
         Assertions.assertEquals(expectedLines.size(), actualLines.size());
@@ -49,7 +45,6 @@ public class FileBackedTaskManagerTest {
 
     @Test
     public void shouldLoadAndSaveFileWithTasks() throws IOException {
-        // make expected and actual file with tasks, create a fileBackedTaskManager and load data
         String[] inFile = {
                 "id,type,name,status,description,epic\n",
                 "0,TASK,Первая задача,NEW,Описание для первой задачи,\n",
@@ -78,12 +73,10 @@ public class FileBackedTaskManagerTest {
         TaskManager fileBackedTaskManager =
                 new FileBackedTaskManager(new InMemoryHistoryManager(), actualFile.toString());
 
-        // save data to the actual file by createTask and removeTaskById methods
         Task task = new Task("name", "description", TaskStatus.IN_PROGRESS);
         fileBackedTaskManager.createTask(task);
         fileBackedTaskManager.removeTaskById(task.getId());
 
-        // check lines in the actual file equals lines in the expected one
         List<String> expectedLines = Files.readAllLines(expectedFile);
         List<String> actualLines = Files.readAllLines(actualFile);
         Assertions.assertEquals(expectedLines.size(), actualLines.size());
