@@ -3,8 +3,8 @@ package service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tracker.service.InMemoryHistoryManager;
-import tracker.service.InMemoryTaskManager;
+import tracker.service.Managers;
+import tracker.service.TaskManager;
 import tracker.tasks.Epic;
 import tracker.tasks.Subtask;
 import tracker.tasks.Task;
@@ -12,12 +12,12 @@ import tracker.tasks.TaskStatus;
 import java.util.HashMap;
 
 class InMemoryTaskManagerTest {
-    private InMemoryTaskManager inMemoryTaskManager;
+    private TaskManager inMemoryTaskManager;
 
     @BeforeEach
     public void beforeEach() {
         // create a taskManager
-        inMemoryTaskManager = new InMemoryTaskManager(new InMemoryHistoryManager());
+        inMemoryTaskManager = Managers.getDefault();
     }
 
     @Test

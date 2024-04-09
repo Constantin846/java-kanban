@@ -1,15 +1,13 @@
 package tracker.tasks;
 
-import tracker.service.TaskManager;
-
 public abstract class AbstractTask {
     String name;
     String description;
     int id;
     TaskStatus taskStatus;
-    TaskManager taskManager;
+    TaskType taskType;
 
-    public AbstractTask(String name, String description, TaskStatus taskStatus) {
+    protected AbstractTask(String name, String description, TaskStatus taskStatus) {
         this.name = name;
         this.description = description;
         this.taskStatus = taskStatus;
@@ -20,9 +18,7 @@ public abstract class AbstractTask {
     }
 
     public void setId(int id) {
-        if (!taskManager.containsId(id)) {
-            this.id = id;
-        }
+        this.id = id;
     }
 
     public String getName() {
@@ -37,8 +33,8 @@ public abstract class AbstractTask {
         return taskStatus;
     }
 
-    public void setTaskManager(TaskManager taskManager) {
-        this.taskManager = taskManager;
+    public TaskType getTaskType() {
+        return taskType;
     }
 
     @Override
