@@ -1,8 +1,11 @@
 package tracker.tasks;
 
-public class Task extends AbstractTask {
-    public Task(String name, String description, TaskStatus taskStatus) {
-        super(name, description, taskStatus);
+import java.time.ZonedDateTime;
+
+public class Task extends AbstractTask implements IntersectableTask {
+    public Task(String name, String description, TaskStatus taskStatus,
+                ZonedDateTime startTime, int durationOfMinutes) {
+        super(name, description, taskStatus, startTime, durationOfMinutes);
         this.taskType = TaskType.TASK;
     }
 }
