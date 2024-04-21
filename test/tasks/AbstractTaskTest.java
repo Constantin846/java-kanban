@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import tracker.tasks.AbstractTask;
 import tracker.tasks.Task;
 import tracker.tasks.TaskStatus;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 class AbstractTaskTest {
     AbstractTask taskExpected;
@@ -14,8 +16,11 @@ class AbstractTaskTest {
     @BeforeEach
     public void beforeEach() {
         // prepare
-        taskExpected = new Task("name", "description", TaskStatus.NEW);
-        taskActual = new Task("new name", "new description", TaskStatus.NEW);
+        ZoneId zoneId = ZoneId.of("UTC+4");
+        taskExpected = new Task("name", "description", TaskStatus.NEW,
+                ZonedDateTime.now(zoneId), 10);
+        taskActual = new Task("new name", "new description", TaskStatus.NEW,
+                ZonedDateTime.now(zoneId), 15);
         taskExpected.setId(123);
     }
 

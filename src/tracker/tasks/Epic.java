@@ -1,14 +1,18 @@
 package tracker.tasks;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 
 public class Epic extends AbstractTask {
     private ArrayList<Subtask> subtasks;
+    private ZonedDateTime endTime;
 
-    public Epic(String name, String description, TaskStatus taskStatus) {
-        super(name, description, taskStatus);
-        subtasks = new ArrayList<>();
+    public Epic(String name, String description) {
+        super(name, description);
+        this.subtasks = new ArrayList<>();
         this.taskType = TaskType.EPIC;
+        this.duration = Duration.ZERO;
         determineEpicStatus();
     }
 
@@ -19,6 +23,12 @@ public class Epic extends AbstractTask {
     public void setSubtasks(ArrayList<Subtask> subtasks) {
         this.subtasks = subtasks;
         determineEpicStatus();
+        determineEpicDurationAndStartEndTime();
+    }
+
+    @Override
+    public ZonedDateTime getEndTime() {
+        return endTime;
     }
 
     private void determineEpicStatus() {
@@ -32,6 +42,28 @@ public class Epic extends AbstractTask {
                 }
             }
             taskStatus = subtasks.get(0).getTaskStatus();
+        }
+    }
+
+    private void determineEpicDurationAndStartEndTime() {
+        if (!subtasks.isEmpty()) {
+            Subtask subtask = subtasks.get(0);
+            startTime = subtask.getStartTime();
+            endTime = subtask.getEndTime();
+            duration = subtask.getDuration();
+
+            for (int i = 1; i < subtasks.size(); i++) {
+                subtask = subtasks.get(i);
+
+                if (startTime.isAfter(subtask.getStartTime())) {
+                    startTime = subtask.getStartTime();
+                }
+
+                if (endTime.isBefore(subtask.getEndTime())) {
+                    endTime = subtask.getEndTime();
+                }
+                duration = duration.plus(subtask.getDuration());
+            }
         }
     }
 }

@@ -1,9 +1,10 @@
 package tracker.service;
 
 import tracker.tasks.*;
-
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.TreeSet;
 
 public interface TaskManager {
     HashMap<Integer, AbstractTask> getAllTasks();
@@ -16,11 +17,13 @@ public interface TaskManager {
 
     void removeAllTasks();
 
-    Task getTaskById(int id);
+    Optional<Task> getTaskById(int id);
 
-    Epic getEpicById(int id);
+    Optional<Epic> getEpicById(int id);
 
-    Subtask getSubtaskById(int id);
+    Optional<Subtask> getSubtaskById(int id);
+
+    TreeSet<IntersectableTask> getPrioritizedTasks();
 
     List<AbstractTask> getHistory();
 
@@ -37,4 +40,6 @@ public interface TaskManager {
     int updateSubtask(Subtask subtask, Subtask newSubtask);
 
     void removeTaskById(int id);
+
+    HashMap<Integer, Subtask> getSubtasksOfEpic(Epic epic);
 }

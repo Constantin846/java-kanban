@@ -1,16 +1,28 @@
 package tracker.tasks;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
+
 public abstract class AbstractTask {
     String name;
     String description;
     int id;
     TaskStatus taskStatus;
     TaskType taskType;
+    ZonedDateTime startTime;
+    Duration duration;
 
-    protected AbstractTask(String name, String description, TaskStatus taskStatus) {
+    protected AbstractTask(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    protected AbstractTask(String name, String description, TaskStatus taskStatus,
+                           ZonedDateTime startTime, long durationOfMinutes) {
+        this(name, description);
         this.taskStatus = taskStatus;
+        this.startTime = startTime;
+        this.duration = Duration.ofMinutes(durationOfMinutes);
     }
 
     public int getId() {
@@ -35,6 +47,18 @@ public abstract class AbstractTask {
 
     public TaskType getTaskType() {
         return taskType;
+    }
+
+    public ZonedDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public ZonedDateTime getEndTime() {
+        return startTime.plus(duration);
     }
 
     @Override

@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import tracker.tasks.Subtask;
 import tracker.tasks.TaskStatus;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 class SubtaskTest {
     Subtask subtaskExpected;
     Subtask subtaskActual;
@@ -13,8 +16,11 @@ class SubtaskTest {
     @BeforeEach
     public void beforeEach() {
         // prepare
-        subtaskExpected = new Subtask("name", "description", TaskStatus.NEW);
-        subtaskActual = new Subtask("name1", "description1", TaskStatus.NEW);
+        ZoneId utc_4 = ZoneId.of("UTC+4");
+        subtaskExpected = new Subtask("name", "description", TaskStatus.NEW,
+                ZonedDateTime.now(utc_4), 10);
+        subtaskActual = new Subtask("name1", "description1", TaskStatus.NEW,
+                ZonedDateTime.now(utc_4), 15);
         subtaskExpected.setId(123);
     }
 

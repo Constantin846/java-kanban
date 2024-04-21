@@ -4,18 +4,32 @@ import tracker.tasks.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 import static tracker.service.IdGenerator.generateId;
 
 class InMemoryTaskManager implements TaskManager {
     protected final HashMap<Integer, Task> taskHashMap;
     protected final HashMap<Integer, Epic> epicHashMap;
     protected final HashMap<Integer, Subtask> subtaskHashMap;
+    protected final TreeSet<IntersectableTask> prioritizedTasksTreeSet;
     protected HistoryManager historyManager;
 
     public InMemoryTaskManager(HistoryManager historyManager) {
         taskHashMap = new HashMap<>();
         epicHashMap = new HashMap<>();
         subtaskHashMap = new HashMap<>();
+
+        prioritizedTasksTreeSet = new TreeSet<>((task1, task2) -> {
+            if (task1.getEndTime().isBefore(task2.getStartTime())) {
+                return -1;
+            } else if (task1.getStartTime().isAfter(task2.getEndTime())) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
         this.historyManager = historyManager;
     }
 
@@ -43,6 +57,11 @@ class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public TreeSet<IntersectableTask> getPrioritizedTasks() {
+        return new TreeSet<>(prioritizedTasksTreeSet);
+    }
+
+    @Override
     public List<AbstractTask> getHistory() {
         return historyManager.getHistory();
     }
@@ -52,44 +71,50 @@ class InMemoryTaskManager implements TaskManager {
         taskHashMap.clear();
         epicHashMap.clear();
         subtaskHashMap.clear();
+        prioritizedTasksTreeSet.clear();
         historyManager = new InMemoryHistoryManager();
     }
 
     @Override
-    public Task getTaskById(int id) {
+    public Optional<Task> getTaskById(int id) {
         if (taskHashMap.containsKey(id)) {
             Task task = taskHashMap.get(id);
             historyManager.add(task);
-            return task;
+            return Optional.of(task);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
-    public Epic getEpicById(int id) {
+    public Optional<Epic> getEpicById(int id) {
         if (epicHashMap.containsKey(id)) {
             Epic epic = epicHashMap.get(id);
             historyManager.add(epic);
-            return epic;
+            return Optional.of(epic);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
-    public Subtask getSubtaskById(int id) {
+    public Optional<Subtask> getSubtaskById(int id) {
         if (subtaskHashMap.containsKey(id)) {
             Subtask subtask = subtaskHashMap.get(id);
             historyManager.add(subtask);
-            return subtask;
+            return Optional.of(subtask);
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
     public int createTask(Task task) {
+        if (prioritizedTasksTreeSet.contains(task)) {
+            return -1;
+        }
+
         int id = generateId();
         task.setId(id);
         taskHashMap.put(id, task);
+        prioritizedTasksTreeSet.add(task);
         return id;
     }
 
@@ -103,6 +128,10 @@ class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createSubtask(Subtask subtask, Epic epic) {
+        if (prioritizedTasksTreeSet.contains(subtask)) {
+            return -1;
+        }
+
         ArrayList<Subtask> subtasks = epic.getSubtasks();
         subtasks.add(subtask);
         epic.setSubtasks(subtasks);
@@ -111,14 +140,23 @@ class InMemoryTaskManager implements TaskManager {
         int id = generateId();
         subtask.setId(id);
         subtaskHashMap.put(id, subtask);
+        prioritizedTasksTreeSet.add(subtask);
         return id;
     }
 
     @Override
     public int updateTask(Task task, Task newTask) {
+        prioritizedTasksTreeSet.remove(task);
+
+        if (prioritizedTasksTreeSet.contains(newTask)) {
+            prioritizedTasksTreeSet.add(task);
+            return -1;
+        }
+
         int id = task.getId();
         newTask.setId(id);
         taskHashMap.put(id, newTask);
+        prioritizedTasksTreeSet.add(newTask);
         return id;
     }
 
@@ -139,6 +177,13 @@ class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int updateSubtask(Subtask subtask, Subtask newSubtask) {
+        prioritizedTasksTreeSet.remove(subtask);
+
+        if (prioritizedTasksTreeSet.contains(newSubtask)) {
+            prioritizedTasksTreeSet.add(subtask);
+            return -1;
+        }
+
         Epic epic = subtask.getTopEpic();
         newSubtask.setTopEpic(epic);
 
@@ -150,6 +195,7 @@ class InMemoryTaskManager implements TaskManager {
         int id = subtask.getId();
         newSubtask.setId(id);
         subtaskHashMap.put(id, newSubtask);
+        prioritizedTasksTreeSet.add(newSubtask);
         return id;
     }
 
@@ -183,13 +229,11 @@ class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
     public HashMap<Integer, Subtask> getSubtasksOfEpic(Epic epic) {
-        HashMap<Integer, Subtask> subtasksOfEpic = new HashMap<>();
         ArrayList<Subtask> subtasks = epic.getSubtasks();
 
-        for (Subtask subtask : subtasks) {
-            subtasksOfEpic.put(subtask.getId(), subtask);
-        }
-        return subtasksOfEpic;
+        return  (HashMap<Integer, Subtask>) subtasks.stream()
+                .collect(Collectors.toMap(AbstractTask::getId, subtask -> subtask));
     }
 }
