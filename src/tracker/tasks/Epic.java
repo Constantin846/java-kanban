@@ -12,7 +12,6 @@ public class Epic extends AbstractTask {
         super(name, description);
         this.subtasks = new ArrayList<>();
         this.taskType = TaskType.EPIC;
-        //this.startTime = ZonedDateTime.now();
         this.duration = Duration.ZERO;
         determineEpicStatus();
     }
