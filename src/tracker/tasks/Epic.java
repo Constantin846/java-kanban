@@ -16,6 +16,11 @@ public class Epic extends AbstractTask {
         determineEpicStatus();
     }
 
+    public  Epic(String name, String description, int id, TaskStatus taskStatus, TaskType taskType,
+                 ZonedDateTime startTime, Duration duration) {
+        super(name, description, id, taskStatus, taskType, startTime, duration);
+    }
+
     public ArrayList<Subtask> getSubtasks() {
         return new ArrayList<>(subtasks);
     }

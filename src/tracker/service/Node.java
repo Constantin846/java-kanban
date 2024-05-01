@@ -2,7 +2,7 @@ package tracker.service;
 
 import tracker.tasks.AbstractTask;
 
-public class Node {
+class Node {
     private Node previousNode;
     private final AbstractTask task;
     private Node nextNode;

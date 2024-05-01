@@ -25,6 +25,16 @@ public abstract class AbstractTask {
         this.duration = Duration.ofMinutes(durationOfMinutes);
     }
 
+    public  AbstractTask(String name, String description, int id, TaskStatus taskStatus, TaskType taskType,
+                 ZonedDateTime startTime, Duration duration) {
+        this(name, description);
+        this.id = id;
+        this.taskStatus = taskStatus;
+        this.taskType = taskType;
+        this.startTime = startTime;
+        this.duration = duration;
+    }
+
     public int getId() {
         return id;
     }
@@ -76,5 +86,9 @@ public abstract class AbstractTask {
     @Override
     public String toString() {
         return String.format("\n%s:\n%s\nстатус - %s", name, description, taskStatus.toString());
+    }
+
+    public static TaskBuilder builder() {
+        return new TaskBuilder();
     }
 }

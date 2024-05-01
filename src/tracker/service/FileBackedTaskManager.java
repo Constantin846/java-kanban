@@ -1,5 +1,7 @@
 package tracker.service;
 
+import tracker.exceptions.ManagerLoadException;
+import tracker.exceptions.ManagerSaveException;
 import tracker.tasks.*;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,7 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import static tracker.service.IdGenerator.setIdSequence;
 
-public class FileBackedTaskManager extends InMemoryTaskManager {
+class FileBackedTaskManager extends InMemoryTaskManager {
     private static final String TITLE_STRING_IN_FILE = "id,type,name,status,description,start_time,duration,epic\n";
     private static final int ID_INDEX = 0;
     private static final int TYPE_INDEX = 1;

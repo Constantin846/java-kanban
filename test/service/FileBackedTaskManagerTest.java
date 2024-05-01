@@ -2,8 +2,7 @@ package service;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import tracker.service.FileBackedTaskManager;
-import tracker.service.InMemoryHistoryManager;
+import tracker.service.Managers;
 import tracker.service.TaskManager;
 import tracker.tasks.Epic;
 import java.io.FileWriter;
@@ -23,7 +22,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest {
         } catch (IOException ioe) {
             throw new RuntimeException();
         }
-        return new FileBackedTaskManager(new InMemoryHistoryManager(), actualFile.toString());
+        return Managers.getFileBacked(actualFile.toString());
     }
     @Test
     public void shouldLoadAndSaveEmptyFile() throws IOException {
@@ -39,9 +38,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest {
                 actualFW.write(str);
             }
         }
-
-        TaskManager fileBackedTaskManager =
-                new FileBackedTaskManager(new InMemoryHistoryManager(), actualFile.toString());
+        TaskManager fileBackedTaskManager = Managers.getFileBacked(actualFile.toString());
 
         fileBackedTaskManager.removeAllTasks();
 
@@ -80,9 +77,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest {
                 actualFW.write(str);
             }
         }
-
-        TaskManager fileBackedTaskManager =
-                new FileBackedTaskManager(new InMemoryHistoryManager(), actualFile.toString());
+        TaskManager fileBackedTaskManager = Managers.getFileBacked(actualFile.toString());
 
         Epic epic = new Epic("name", "description");
         fileBackedTaskManager.createEpic(epic);

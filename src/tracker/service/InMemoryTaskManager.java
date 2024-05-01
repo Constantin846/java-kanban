@@ -1,5 +1,6 @@
 package tracker.service;
 
+import tracker.exceptions.TaskIntersectionException;
 import tracker.tasks.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,7 +109,7 @@ class InMemoryTaskManager implements TaskManager {
     @Override
     public int createTask(Task task) {
         if (prioritizedTasksTreeSet.contains(task)) {
-            return -1;
+            throw new TaskIntersectionException();
         }
 
         int id = generateId();
@@ -129,7 +130,7 @@ class InMemoryTaskManager implements TaskManager {
     @Override
     public int createSubtask(Subtask subtask, Epic epic) {
         if (prioritizedTasksTreeSet.contains(subtask)) {
-            return -1;
+            throw new TaskIntersectionException();
         }
 
         ArrayList<Subtask> subtasks = epic.getSubtasks();
@@ -150,7 +151,7 @@ class InMemoryTaskManager implements TaskManager {
 
         if (prioritizedTasksTreeSet.contains(newTask)) {
             prioritizedTasksTreeSet.add(task);
-            return -1;
+            throw new TaskIntersectionException();
         }
 
         int id = task.getId();
@@ -181,7 +182,7 @@ class InMemoryTaskManager implements TaskManager {
 
         if (prioritizedTasksTreeSet.contains(newSubtask)) {
             prioritizedTasksTreeSet.add(subtask);
-            return -1;
+            throw new TaskIntersectionException();
         }
 
         Epic epic = subtask.getTopEpic();
