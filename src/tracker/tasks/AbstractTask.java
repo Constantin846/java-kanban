@@ -25,16 +25,6 @@ public abstract class AbstractTask {
         this.duration = Duration.ofMinutes(durationOfMinutes);
     }
 
-    public  AbstractTask(String name, String description, int id, TaskStatus taskStatus, TaskType taskType,
-                 ZonedDateTime startTime, Duration duration) {
-        this(name, description);
-        this.id = id;
-        this.taskStatus = taskStatus;
-        this.taskType = taskType;
-        this.startTime = startTime;
-        this.duration = duration;
-    }
-
     public int getId() {
         return id;
     }

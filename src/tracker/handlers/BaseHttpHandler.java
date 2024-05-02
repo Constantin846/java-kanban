@@ -1,10 +1,13 @@
 package tracker.handlers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import tracker.adapters.DurationAdapter;
-import tracker.adapters.ZonedDateTimeAdapter;
+import tracker.adapters.TaskAdapter;
 import tracker.service.TaskManager;
+import tracker.tasks.Task;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
@@ -12,14 +15,13 @@ import java.time.format.DateTimeFormatter;
 abstract class BaseHttpHandler implements HttpHandler {
     protected static final int ID_INDEX = 2;
     protected final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yy | HH:mm");
-    protected final ZonedDateTimeAdapter zonedDateTimeAdapter;
-    protected final DurationAdapter durationAdapter;
+
+    protected final Gson gson;
     protected final TaskManager taskManager;
 
     protected BaseHttpHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
-        this.zonedDateTimeAdapter = new ZonedDateTimeAdapter(dateTimeFormatter);
-        this.durationAdapter = new DurationAdapter();
+        this.gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
     }
 
     @Override

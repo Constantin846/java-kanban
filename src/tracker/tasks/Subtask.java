@@ -12,12 +12,6 @@ public class Subtask extends AbstractTask implements IntersectableTask {
         this.taskType = TaskType.SUBTASK;
     }
 
-    public Subtask(int topEpic, String name, String description, int id, TaskStatus taskStatus, TaskType taskType,
-                 ZonedDateTime startTime, Duration duration) {
-        super(name, description, id, taskStatus, taskType, startTime, duration);
-        this.topEpic = null;
-    }
-
     public Epic getTopEpic() {
         return topEpic;
     }
