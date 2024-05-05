@@ -43,10 +43,10 @@ public class TaskHandlerTest extends HttpTaskManagerTest {
 
         Map<Integer, Task> tasksFromManager = taskManager.getOnlyTasks();
 
-        assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(tasksFromManager, "Task is not returned");
+        assertEquals(1, tasksFromManager.size(), "Incorrect amount of tasks");
         assertEquals("first", tasksFromManager.get(firstTask.getId()).getName(),
-                "Некорректное имя задачи");
+                "Incorrect task name");
     }
 
     @Test
@@ -67,10 +67,10 @@ public class TaskHandlerTest extends HttpTaskManagerTest {
 
         Map<Integer, Task> tasksFromManager = taskManager.getOnlyTasks();
 
-        assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(tasksFromManager, "Task is not returned");
+        assertEquals(1, tasksFromManager.size(), "Incorrect amount of tasks");
         assertEquals("expectedName", tasksFromManager.get(firstTask.getId()).getName(),
-                "Некорректное имя задачи");
+                "Incorrect task name");
     }
 
     @Test
@@ -89,7 +89,7 @@ public class TaskHandlerTest extends HttpTaskManagerTest {
         Task actualTask = gson.fromJson(body, Task.class);
         Task expectedTask = taskManager.getOnlyTasks().get(firstTask.getId());
 
-        assertNotNull(actualTask, "Задачи не возвращаются");
+        assertNotNull(actualTask, "Task is not returned");
         assertEquals(expectedTask.getName(), actualTask.getName());
         assertEquals(expectedTask.getDescription(), actualTask.getDescription());
         assertEquals(expectedTask.getTaskStatus(), actualTask.getTaskStatus());

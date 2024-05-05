@@ -50,10 +50,10 @@ public class SubtaskHandlerTest extends HttpTaskManagerTest {
 
         Map<Integer, Subtask> tasksFromManager = taskManager.getOnlySubtasks();
 
-        assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(tasksFromManager, "Subtask is not returned");
+        assertEquals(1, tasksFromManager.size(), "Incorrect amount of subtasks");
         assertEquals("first", tasksFromManager.get(1).getName(),
-                "Некорректное имя задачи");
+                "Incorrect subtask name");
     }
 
     @Test
@@ -75,10 +75,10 @@ public class SubtaskHandlerTest extends HttpTaskManagerTest {
 
         Map<Integer, Subtask> tasksFromManager = taskManager.getOnlySubtasks();
 
-        assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(tasksFromManager, "Subtask is not returned");
+        assertEquals(1, tasksFromManager.size(), "Incorrect amount of subtasks");
         assertEquals("expectedName", tasksFromManager.get(firstSubtask.getId()).getName(),
-                "Некорректное имя задачи");
+                "Incorrect epic name");
     }
 
     @Test
@@ -97,7 +97,7 @@ public class SubtaskHandlerTest extends HttpTaskManagerTest {
         Subtask actualSubtask = gson.fromJson(body, Subtask.class);
         Subtask expectedSubtask = taskManager.getOnlySubtasks().get(firstSubtask.getId());
 
-        assertNotNull(actualSubtask, "Задачи не возвращаются");
+        assertNotNull(actualSubtask, "Subtask was not returned");
         assertEquals(expectedSubtask.getName(), actualSubtask.getName());
         assertEquals(expectedSubtask.getDescription(), actualSubtask.getDescription());
         assertEquals(expectedSubtask.getTaskStatus(), actualSubtask.getTaskStatus());

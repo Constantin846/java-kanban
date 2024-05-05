@@ -39,10 +39,10 @@ public class EpicHandlerTest extends HttpTaskManagerTest {
 
         Map<Integer, Epic> tasksFromManager = taskManager.getOnlyEpics();
 
-        assertNotNull(tasksFromManager, "Задачи не возвращаются");
-        assertEquals(1, tasksFromManager.size(), "Некорректное количество задач");
+        assertNotNull(tasksFromManager, "Epic is not returned");
+        assertEquals(1, tasksFromManager.size(), "Incorrect amount of epics");
         assertEquals("first", tasksFromManager.get(firstEpic.getId()).getName(),
-                "Некорректное имя задачи");
+                "Incorrect epic name");
     }
 
     @Test
@@ -62,10 +62,10 @@ public class EpicHandlerTest extends HttpTaskManagerTest {
 
         Map<Integer, Epic> epicsFromManager = taskManager.getOnlyEpics();
 
-        assertNotNull(epicsFromManager, "Задачи не возвращаются");
-        assertEquals(1, epicsFromManager.size(), "Некорректное количество задач");
+        assertNotNull(epicsFromManager, "Epic is not returned");
+        assertEquals(1, epicsFromManager.size(), "Incorrect amount of epics");
         assertEquals("expectedName", epicsFromManager.get(firstEpic.getId()).getName(),
-                "Некорректное имя задачи");
+                "Incorrect epic name");
     }
 
     @Test
@@ -84,7 +84,7 @@ public class EpicHandlerTest extends HttpTaskManagerTest {
         Epic actualEpic = gson.fromJson(body, Epic.class);
         Epic expectedEpic = taskManager.getOnlyEpics().get(firstEpic.getId());
 
-        assertNotNull(actualEpic, "Задачи не возвращаются");
+        assertNotNull(actualEpic, "Epic was not returned");
         assertEquals(expectedEpic.getName(), actualEpic.getName());
         assertEquals(expectedEpic.getDescription(), actualEpic.getDescription());
         assertEquals(expectedEpic.getTaskStatus(), actualEpic.getTaskStatus());

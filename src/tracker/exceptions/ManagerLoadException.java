@@ -2,6 +2,6 @@ package tracker.exceptions;
 
 public class ManagerLoadException extends RuntimeException {
     public ManagerLoadException() {
-        super("Ошибка при загрузке файла!");
+        super("Error during file load!");
     }
 }
