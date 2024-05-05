@@ -1,9 +1,7 @@
 package tracker.handlers;
 
-import com.google.gson.JsonObject;
+import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
-import tracker.converters.EpicJsonConverter;
-import tracker.converters.SubtaskJsonConverter;
 import tracker.service.TaskManager;
 import tracker.tasks.Epic;
 import tracker.tasks.Subtask;
@@ -13,14 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class EpicsHandler extends BaseHttpHandler {
-    private final EpicJsonConverter epicJsonConverter;
-    private final SubtaskJsonConverter subtaskJsonConverter;
-
-    public EpicsHandler(TaskManager taskManager) {
-        super(taskManager);
-        epicJsonConverter = new EpicJsonConverter();
-        subtaskJsonConverter = new SubtaskJsonConverter();
+public class EpicsHandler extends BaseTaskHandler {
+    public EpicsHandler(TaskManager taskManager, Gson gson) {
+        super(taskManager, gson);
     }
 
     @Override
@@ -29,15 +22,13 @@ public class EpicsHandler extends BaseHttpHandler {
 
         if (path.matches("^/epics$")) {
             HashMap<Integer, Epic> epics = taskManager.getOnlyEpics();
-            JsonObject jsonObject = epicJsonConverter.toJson(epics);
-            sendText(exchange, 200, gson.toJson(jsonObject));
+            sendText(exchange, 200, gson.toJson(epics));
 
         } else if (path.matches("^/epics/(\\d+)$")) {
             Optional<Epic> epic = taskManager.getEpicById(Integer.parseInt(splitPath[ID_INDEX]));
 
             if (epic.isPresent()) {
-                JsonObject jsonObject = epicJsonConverter.toJson(epic.get());
-                sendText(exchange, 200, gson.toJson(jsonObject));
+                sendText(exchange, 200, gson.toJson(epic.get()));
             } else {
                 sendText(exchange, 404, "Epic Not Found");
             }
@@ -47,7 +38,6 @@ public class EpicsHandler extends BaseHttpHandler {
 
             if (epic.isPresent()) {
                 HashMap<Integer, Subtask> subtasks = taskManager.getSubtasksOfEpic(epic.get());
-                JsonObject jsonObject = subtaskJsonConverter.toJson(subtasks);
                 sendText(exchange, 200, gson.toJson(subtasks));
             } else {
                 sendText(exchange, 404, "Epic Not Found");
@@ -62,9 +52,7 @@ public class EpicsHandler extends BaseHttpHandler {
     public void handlePostRequest(HttpExchange exchange, String path) throws IOException {
         InputStream inputStream = exchange.getRequestBody();
         String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-
-        JsonObject jsonObject = gson.fromJson(body, JsonObject.class);
-        Epic epic = epicJsonConverter.fromJson(jsonObject);
+        Epic epic = gson.fromJson(body, Epic.class);
 
         if (path.matches("^/epics$")) {
             taskManager.createEpic(epic);

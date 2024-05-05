@@ -3,7 +3,7 @@ package tracker.adapters;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import tracker.tasks.Task;
+import tracker.tasks.Subtask;
 import tracker.tasks.TaskBuilder;
 import tracker.tasks.TaskStatus;
 import java.io.IOException;
@@ -13,44 +13,45 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class TaskAdapter extends TypeAdapter<Task> {
+public class SubtaskAdapter extends TypeAdapter<Subtask> {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yy | HH:mm");
     private static final ZoneId ZONE_ID = ZoneId.of("UTC+4");
     private final DateTimeFormatter dateTimeFormatter;
     private final ZoneId zoneId;
 
-    public TaskAdapter() {
+    public SubtaskAdapter() {
         this(DATE_TIME_FORMATTER, ZONE_ID);
     }
 
-    public TaskAdapter(DateTimeFormatter dateTimeFormatter) {
+    public SubtaskAdapter(DateTimeFormatter dateTimeFormatter) {
         this(dateTimeFormatter, ZONE_ID);
     }
 
-    public TaskAdapter(ZoneId zoneId) {
+    public SubtaskAdapter(ZoneId zoneId) {
         this(DATE_TIME_FORMATTER, zoneId);
     }
 
-    public TaskAdapter(DateTimeFormatter dateTimeFormatter, ZoneId zoneId) {
+    public SubtaskAdapter(DateTimeFormatter dateTimeFormatter, ZoneId zoneId) {
         this.dateTimeFormatter = dateTimeFormatter;
         this.zoneId = zoneId;
     }
 
     @Override
-    public void write(JsonWriter jsonWriter, Task task) throws IOException {
+    public void write(JsonWriter jsonWriter, Subtask subtask) throws IOException {
         jsonWriter.beginObject()
-                .name("name").value(task.getName())
-                .name("description").value(task.getDescription())
-                .name("id").value(task.getId())
-                .name("taskStatus").value(task.getTaskStatus().name())
-                .name("taskType").value(task.getTaskType().name())
-                .name("startTime").value(task.getStartTime().format(dateTimeFormatter))
-                .name("durationOfMinutes").value(task.getDuration().toMinutes())
+                .name("name").value(subtask.getName())
+                .name("description").value(subtask.getDescription())
+                .name("id").value(subtask.getId())
+                .name("taskStatus").value(subtask.getTaskStatus().name())
+                .name("taskType").value(subtask.getTaskType().name())
+                .name("startTime").value(subtask.getStartTime().format(dateTimeFormatter))
+                .name("durationOfMinutes").value(subtask.getDuration().toMinutes())
+                .name("topEpic").value(subtask.getTopEpic().getId())
                 .endObject();
     }
 
     @Override
-    public Task read(JsonReader jsonReader) throws IOException {
+    public Subtask read(JsonReader jsonReader) throws IOException {
         TaskBuilder taskBuilder = new TaskBuilder();
         jsonReader.beginObject();
 
@@ -77,6 +78,6 @@ public class TaskAdapter extends TypeAdapter<Task> {
             }
         }
         jsonReader.endObject();
-        return taskBuilder.buildTask();
+        return taskBuilder.buildSubtask();
     }
 }

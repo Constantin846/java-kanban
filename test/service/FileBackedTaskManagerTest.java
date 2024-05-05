@@ -11,7 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class FileBackedTaskManagerTest extends TaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest {
 
     @Override
     protected TaskManager createTaskManager() {

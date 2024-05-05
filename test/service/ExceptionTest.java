@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import tracker.exceptions.ManagerLoadException;
 import tracker.service.Managers;
 
-public class ExceptionTest {
+class ExceptionTest {
     @Test
     public void testManagerLoadException() {
         Assertions.assertThrows(ManagerLoadException.class, () ->

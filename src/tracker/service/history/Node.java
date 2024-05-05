@@ -1,4 +1,4 @@
-package tracker.service;
+package tracker.service.history;
 
 import tracker.tasks.AbstractTask;
 

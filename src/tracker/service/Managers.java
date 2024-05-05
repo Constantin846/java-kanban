@@ -1,5 +1,8 @@
 package tracker.service;
 
+import tracker.service.history.HistoryManager;
+import tracker.service.history.HistoryManagerGetter;
+
 public class Managers {
     private Managers() {
     }
@@ -17,6 +20,6 @@ public class Managers {
     }
 
     public static HistoryManager getDefaultHistory() {
-        return new InMemoryHistoryManager();
+        return HistoryManagerGetter.getDefaultHistory();
     }
 }

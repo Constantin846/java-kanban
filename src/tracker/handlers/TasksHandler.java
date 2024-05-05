@@ -1,8 +1,7 @@
 package tracker.handlers;
 
-import com.google.gson.JsonObject;
+import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
-import tracker.converters.TaskJsonConverter;
 import tracker.exceptions.TaskIntersectionException;
 import tracker.service.TaskManager;
 import tracker.tasks.Task;
@@ -12,28 +11,23 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class TasksHandler extends BaseHttpHandler {
-    private final TaskJsonConverter taskJsonConverter;
-
-    public TasksHandler(TaskManager taskManager) {
-        super(taskManager);
-        taskJsonConverter = new TaskJsonConverter();
+public class TasksHandler extends BaseTaskHandler {
+    public TasksHandler(TaskManager taskManager, Gson gson) {
+        super(taskManager, gson);
     }
 
     @Override
     public void handleGetRequest(HttpExchange exchange, String path) throws IOException {
         if (path.matches("^/tasks$")) {
             HashMap<Integer, Task> tasks = taskManager.getOnlyTasks();
-            JsonObject jsonObject = taskJsonConverter.toJson(tasks);
-            sendText(exchange, 200, gson.toJson(jsonObject));
+            sendText(exchange, 200, gson.toJson(tasks));
 
         } else if (path.matches("^/tasks/(\\d+)$")) {
             String[] splitPath = path.split("/");
             Optional<Task> task = taskManager.getTaskById(Integer.parseInt(splitPath[ID_INDEX]));
 
             if (task.isPresent()) {
-                JsonObject jsonObject = taskJsonConverter.toJson(task.get());
-                sendText(exchange, 200, gson.toJson(jsonObject));
+                sendText(exchange, 200, gson.toJson(task.get()));
             } else {
                 sendText(exchange, 404, "Task Not Found");
             }
@@ -46,9 +40,7 @@ public class TasksHandler extends BaseHttpHandler {
     public void handlePostRequest(HttpExchange exchange, String path) throws IOException {
         InputStream inputStream = exchange.getRequestBody();
         String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-
-        JsonObject jsonObject = gson.fromJson(body, JsonObject.class);
-        Task task = taskJsonConverter.fromJson(jsonObject);
+        Task task = gson.fromJson(body, Task.class);
 
         try {
             if (path.matches("^/tasks$")) {
@@ -64,7 +56,9 @@ public class TasksHandler extends BaseHttpHandler {
                     sendText(exchange, 201, "Task Updated");
                 } else {
                     sendText(exchange, 404, "Task Not Found");
-                }}  else {
+                }
+
+            } else {
                 sendText(exchange,404, "Not Found");
             }
 
