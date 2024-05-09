@@ -1,5 +1,7 @@
 package tracker.service;
 
+import tracker.exceptions.TaskIntersectionException;
+import tracker.service.history.HistoryManager;
 import tracker.tasks.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-import static tracker.service.IdGenerator.generateId;
 
 class InMemoryTaskManager implements TaskManager {
+    protected final IdGenerator idGenerator;
     protected final HashMap<Integer, Task> taskHashMap;
     protected final HashMap<Integer, Epic> epicHashMap;
     protected final HashMap<Integer, Subtask> subtaskHashMap;
@@ -17,6 +19,7 @@ class InMemoryTaskManager implements TaskManager {
     protected HistoryManager historyManager;
 
     public InMemoryTaskManager(HistoryManager historyManager) {
+        idGenerator = new IdGenerator();
         taskHashMap = new HashMap<>();
         epicHashMap = new HashMap<>();
         subtaskHashMap = new HashMap<>();
@@ -72,7 +75,7 @@ class InMemoryTaskManager implements TaskManager {
         epicHashMap.clear();
         subtaskHashMap.clear();
         prioritizedTasksTreeSet.clear();
-        historyManager = new InMemoryHistoryManager();
+        historyManager = Managers.getDefaultHistory();
     }
 
     @Override
@@ -108,10 +111,10 @@ class InMemoryTaskManager implements TaskManager {
     @Override
     public int createTask(Task task) {
         if (prioritizedTasksTreeSet.contains(task)) {
-            return -1;
+            throw new TaskIntersectionException();
         }
 
-        int id = generateId();
+        int id = idGenerator.generateId();
         task.setId(id);
         taskHashMap.put(id, task);
         prioritizedTasksTreeSet.add(task);
@@ -120,7 +123,7 @@ class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createEpic(Epic epic) {
-        int id = generateId();
+        int id = idGenerator.generateId();
         epic.setId(id);
         epicHashMap.put(id, epic);
         return id;
@@ -129,7 +132,7 @@ class InMemoryTaskManager implements TaskManager {
     @Override
     public int createSubtask(Subtask subtask, Epic epic) {
         if (prioritizedTasksTreeSet.contains(subtask)) {
-            return -1;
+            throw new TaskIntersectionException();
         }
 
         ArrayList<Subtask> subtasks = epic.getSubtasks();
@@ -137,7 +140,7 @@ class InMemoryTaskManager implements TaskManager {
         epic.setSubtasks(subtasks);
         subtask.setTopEpic(epic);
 
-        int id = generateId();
+        int id = idGenerator.generateId();
         subtask.setId(id);
         subtaskHashMap.put(id, subtask);
         prioritizedTasksTreeSet.add(subtask);
@@ -150,7 +153,7 @@ class InMemoryTaskManager implements TaskManager {
 
         if (prioritizedTasksTreeSet.contains(newTask)) {
             prioritizedTasksTreeSet.add(task);
-            return -1;
+            throw new TaskIntersectionException();
         }
 
         int id = task.getId();
@@ -181,7 +184,7 @@ class InMemoryTaskManager implements TaskManager {
 
         if (prioritizedTasksTreeSet.contains(newSubtask)) {
             prioritizedTasksTreeSet.add(subtask);
-            return -1;
+            throw new TaskIntersectionException();
         }
 
         Epic epic = subtask.getTopEpic();
@@ -235,5 +238,14 @@ class InMemoryTaskManager implements TaskManager {
 
         return  (HashMap<Integer, Subtask>) subtasks.stream()
                 .collect(Collectors.toMap(AbstractTask::getId, subtask -> subtask));
+    }
+
+    @Override
+    public Optional<Epic> getTopEpicById(int id) {
+        if (epicHashMap.containsKey(id)) {
+            Epic epic = epicHashMap.get(id);
+            return Optional.of(epic);
+        }
+        return Optional.empty();
     }
 }

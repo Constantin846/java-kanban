@@ -77,4 +77,8 @@ public abstract class AbstractTask {
     public String toString() {
         return String.format("\n%s:\n%s\nстатус - %s", name, description, taskStatus.toString());
     }
+
+    public static TaskBuilder builder() {
+        return new TaskBuilder();
+    }
 }

@@ -42,4 +42,6 @@ public interface TaskManager {
     void removeTaskById(int id);
 
     HashMap<Integer, Subtask> getSubtasksOfEpic(Epic epic);
+
+    Optional<Epic> getTopEpicById(int id);
 }

@@ -1,10 +1,10 @@
-package tracker.service;
+package tracker.service.history;
 
 import tracker.tasks.AbstractTask;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class InMemoryHistoryManager implements HistoryManager {
+class InMemoryHistoryManager implements HistoryManager {
     private final HashMap<Integer, Node> taskLinkedMap;
     private Node firstNode;
     private Node lastNode;

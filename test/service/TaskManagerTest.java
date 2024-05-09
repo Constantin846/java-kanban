@@ -3,6 +3,7 @@ package service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tracker.exceptions.TaskIntersectionException;
 import tracker.service.Managers;
 import tracker.service.TaskManager;
 import tracker.tasks.*;
@@ -48,10 +49,24 @@ abstract class TaskManagerTest {
         taskManager.createTask(firstTask);
         taskManager.createTask(secondTask);
         taskManager.createEpic(epicWithSubtask);
-        taskManager.createSubtask(firstSubtask, epicWithSubtask);
-        taskManager.createSubtask(secondSubtask, epicWithSubtask);
+
+        try {
+            taskManager.createSubtask(firstSubtask, epicWithSubtask);
+        } catch (TaskIntersectionException tie) {
+            System.out.println("First subtask has not been added");
+        }
+        try {
+            taskManager.createSubtask(secondSubtask, epicWithSubtask);
+        } catch (TaskIntersectionException tie) {
+            System.out.println("Second subtask has not been added");
+        }
         taskManager.createSubtask(thirdSubtask, epicWithSubtask);
-        taskManager.updateTask(secondTask, newSecondTask);
+
+        try {
+            taskManager.updateTask(secondTask, newSecondTask);
+        } catch (TaskIntersectionException tie) {
+            System.out.println("Second task has not been updated");
+        }
 
         TreeSet<IntersectableTask> prioritizedTasks = taskManager.getPrioritizedTasks();
         Iterator<IntersectableTask> iterator = prioritizedTasks.iterator();
@@ -137,7 +152,7 @@ abstract class TaskManagerTest {
         Task firstTask = new Task("name","des", TaskStatus.NEW,
                 ZonedDateTime.now(zoneId), 18);
         Task secondTask = new Task("new name","new des", TaskStatus.NEW,
-                ZonedDateTime.now(zoneId), 20);
+                ZonedDateTime.now(zoneId).plusMinutes(20), 20);
         taskManager.createTask(firstTask);
         taskManager.createTask(secondTask);
 
@@ -160,14 +175,10 @@ abstract class TaskManagerTest {
         Task task = new Task("name","description", TaskStatus.NEW,
                 ZonedDateTime.now(zoneId), 22);
 
-        // add the task to the taskManager twice and get their id
-        int firstId = taskManager.createTask(task);
-        int actualId = taskManager.createTask(task);
-        int expectedId = -1;
+        // add the task to the taskManager
+        taskManager.createTask(task);
 
-
-        // check that returned id do not equal and actual id equals minus one
-        Assertions.assertNotEquals(firstId, actualId);
-        Assertions.assertEquals(expectedId, actualId);
+        // check that to add one task to taskManager twice throw exception
+        Assertions.assertThrows(TaskIntersectionException.class, () -> taskManager.createTask(task));
     }
 }

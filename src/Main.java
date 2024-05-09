@@ -1,5 +1,4 @@
-import tracker.service.FileBackedTaskManager;
-import tracker.service.InMemoryHistoryManager;
+import tracker.service.Managers;
 import tracker.service.TaskManager;
 import tracker.tasks.*;
 import java.time.ZoneId;
@@ -11,7 +10,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Поехали!");
-        TaskManager fileBackedTaskManager = new FileBackedTaskManager(new InMemoryHistoryManager());
+        TaskManager fileBackedTaskManager = Managers.getFileBacked();
 
         Task firstTask = new Task("Первая задача", "Описание для первой задачи", TaskStatus.NEW,
                 ZonedDateTime.now(UTC_PLUS_4), 30);
@@ -47,7 +46,7 @@ public class Main {
         System.out.println(fileBackedTaskManager.getHistory());
         System.out.println("_______________________________________");
 
-        TaskManager fbtm = new FileBackedTaskManager(new InMemoryHistoryManager());
+        TaskManager fbtm = Managers.getFileBacked();
         System.out.println(fbtm.getHistory());
         System.out.println("_______________________________________");
 
